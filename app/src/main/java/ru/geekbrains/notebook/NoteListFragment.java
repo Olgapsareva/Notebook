@@ -5,8 +5,6 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +14,7 @@ import android.widget.TextView;
 public class NoteListFragment extends Fragment {
 
     private boolean isLandscape;
+    private Note selectedNote;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -54,6 +53,7 @@ public class NoteListFragment extends Fragment {
     private void createNoteItem(TextView txtV, Note note) {
         txtV.setText(note.getTitle());
         txtV.setOnClickListener(v->{
+            selectedNote = note;
             if(isLandscape){
                 showLandscapeNote(note);
             } else{
@@ -64,19 +64,19 @@ public class NoteListFragment extends Fragment {
     }
 
     private void showLandscapeNote(Note note) {
-        NoteFragment fragment = NoteFragment.newInstance(note.getTitle(), note.getBody());
+        NoteFragment fragment = NoteFragment.newInstance(note);
         getActivity().getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.note_fragment_land, fragment)
+                .replace(R.id.flfrag, fragment)
                 .commit();
     }
 
     private void showPortraitNote(Note note) {
         Intent intent = new Intent();
         intent.setClass(getActivity(), NoteActivity.class);
-        intent.putExtra(NoteActivity.TITLE, note.getTitle());
-        intent.putExtra(NoteActivity.BODY, note.getBody());
+        intent.putExtra(NoteActivity.PARCEL, note);
         startActivity(intent);
 
     }
+
 }
