@@ -1,5 +1,6 @@
 package ru.geekbrains.notebook;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -14,6 +15,7 @@ public class NoteFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String KEY = "NOTE";
     private Note selectedNote;
+    private DatePickerDialog dateWindow;
 
 
     public NoteFragment() {
@@ -49,9 +51,11 @@ public class NoteFragment extends Fragment {
             TextView title = view.findViewById(R.id.title);
             title.setText(selectedNote.getTitle());
         }
+        //EditText date = view.findViewById(R.id.date);
 
         return view;
     }
+
 
 
 }

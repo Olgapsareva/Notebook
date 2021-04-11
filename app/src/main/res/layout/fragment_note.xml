@@ -20,7 +20,7 @@
             android:text="@string/title"
             tools:background="@color/teal_200" />
 
-        <TextView
+        <EditText
             android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

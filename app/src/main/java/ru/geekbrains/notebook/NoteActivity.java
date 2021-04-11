@@ -6,10 +6,7 @@ import android.widget.TextView;
 
 public class NoteActivity extends AppCompatActivity {
 
-    /*public static final String TITLE = "TITLE";
-    public static final String BODY = "BODY";*/
     public static final String PARCEL = "PARCEL";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

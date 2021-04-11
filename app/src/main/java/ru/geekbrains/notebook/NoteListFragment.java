@@ -14,7 +14,6 @@ import android.widget.TextView;
 public class NoteListFragment extends Fragment {
 
     private boolean isLandscape;
-    private Note selectedNote;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -53,7 +52,6 @@ public class NoteListFragment extends Fragment {
     private void createNoteItem(TextView txtV, Note note) {
         txtV.setText(note.getTitle());
         txtV.setOnClickListener(v->{
-            selectedNote = note;
             if(isLandscape){
                 showLandscapeNote(note);
             } else{
@@ -62,7 +60,7 @@ public class NoteListFragment extends Fragment {
 
         });
     }
-
+    //если ориентация альбомная то создается новый фрагмент рядом
     private void showLandscapeNote(Note note) {
         NoteFragment fragment = NoteFragment.newInstance(note);
         getActivity().getSupportFragmentManager()
@@ -71,12 +69,18 @@ public class NoteListFragment extends Fragment {
                 .commit();
     }
 
+    //если ориентация портретная то вызывается новая активити
     private void showPortraitNote(Note note) {
-        Intent intent = new Intent();
+        /*Intent intent = new Intent();
         intent.setClass(getActivity(), NoteActivity.class);
         intent.putExtra(NoteActivity.PARCEL, note);
-        startActivity(intent);
+        startActivity(intent);*/
 
+        NoteFragment fragment = NoteFragment.newInstance(note);
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.note_list_fragment, fragment)
+                .commit();
     }
 
 }
