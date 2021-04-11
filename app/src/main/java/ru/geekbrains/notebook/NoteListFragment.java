@@ -1,14 +1,16 @@
 package ru.geekbrains.notebook;
 
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class NoteListFragment extends Fragment {
@@ -35,18 +37,20 @@ public class NoteListFragment extends Fragment {
         initNoteList(view);
     }
 
+
     private void initNoteList(View view) {
-        LinearLayout root = (LinearLayout) view;
+        Note[] data = Note.getNotes();
+        RecyclerView recyclerView = view.findViewById(R.id.recycle_note_list);
 
-        TextView textView1 = new TextView(getContext());
-        createNoteItem(textView1, new Note("note1","заметка1"));
+        //создаем адаптер и сетим листенера на нажание элемента списка
+        NoteListAdapter adapter = new NoteListAdapter(data, (view1, position) ->
+                //TODO заменить на что-то полезное:
+                Log.i("PLACEHOLDER", String.format("note %s selected", data[position].getTitle()))
+        );
 
-        TextView textView2 = new TextView(getContext());
-        createNoteItem(textView2, new Note("note2","заметка2"));
-
-        root.addView(textView1);
-        root.addView(textView2);
-
+        //прикручиваем адаптер к ресайкл вью и отображаем с помощью менеджера
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
     }
 
     private void createNoteItem(TextView txtV, Note note) {
