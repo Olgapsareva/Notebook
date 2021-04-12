@@ -11,4 +11,10 @@
     <string name="settings">Settings</string>
     <string name="nav_open_drawer">Open navigation drawer</string>
     <string name="nav_close_drawer">Close navigation drawer</string>
+    <string name="title1">Shopping list</string>
+    <string name="title2">To DO list</string>
+    <string name="title3">note</string>
+    <string name="description1">sugar\nsalt\nbread</string>
+    <string name="description2">wake up\ndo stuff\ngo to bed</string>
+    <string name="description3" />
 </resources>

@@ -2,6 +2,7 @@ package ru.geekbrains.notebook;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -39,13 +40,15 @@ public class NoteListFragment extends Fragment {
 
 
     private void initNoteList(View view) {
-        Note[] data = Note.getNotes();
+        //Note[] data = Note.getNotes();
+        CardSource data = new CardSourceImpl(getResources()).init();
         RecyclerView recyclerView = view.findViewById(R.id.recycle_note_list);
 
         //создаем адаптер и сетим листенера на нажание элемента списка
         NoteListAdapter adapter = new NoteListAdapter(data, (view1, position) ->
                 //TODO заменить на что-то полезное:
-                Log.i("PLACEHOLDER", String.format("note %s selected", data[position].getTitle()))
+                Log.i("PLACEHOLDER", String.format("note %s selected", data.getCardData(position).getTitle()))
+                //createNoteItem((TextView) view1, data[position])
         );
 
         //прикручиваем адаптер к ресайкл вью и отображаем с помощью менеджера
@@ -55,15 +58,16 @@ public class NoteListFragment extends Fragment {
 
     private void createNoteItem(TextView txtV, Note note) {
         txtV.setText(note.getTitle());
-        txtV.setOnClickListener(v->{
-            if(isLandscape){
+        txtV.setOnClickListener(v -> {
+            if (isLandscape) {
                 showLandscapeNote(note);
-            } else{
+            } else {
                 showPortraitNote(note);
             }
 
         });
     }
+
     //если ориентация альбомная то создается новый фрагмент рядом
     private void showLandscapeNote(Note note) {
         NoteFragment fragment = NoteFragment.newInstance(note);

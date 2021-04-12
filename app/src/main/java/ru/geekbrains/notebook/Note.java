@@ -11,25 +11,23 @@ public class Note implements Parcelable {
     private String title;
     private String body;
     private LocalDate dateOfCreation;
-    private static int count;
+    //private static int count;
 
     public static Note[] notes = {
             new Note("shopping list", "sugar\nsalt\nbread"),
             new Note("To DO list", "wake up\ndo stuff\ngo to bed"),
             new Note("note","")};
 
-    private Note(String title, String body){
+    public Note(String title, String body){
         this.title = title;
         this.body = body;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             dateOfCreation = LocalDate.now();
         }
-        count++;
+        //count++;
     }
 
-    private Note() {
-        this(String.format("new note %d", count), "");
-    }
+
 
     protected Note(Parcel in) {
         title = in.readString();
