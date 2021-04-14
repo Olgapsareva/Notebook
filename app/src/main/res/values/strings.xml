@@ -17,4 +17,8 @@
     <string name="description1">sugar\nsalt\nbread</string>
     <string name="description2">wake up\ndo stuff\ngo to bed</string>
     <string name="description3" />
+    <string name="add">add</string>
+    <string name="delete">trash</string>
+    <string name="clear">remove all</string>
+    <string name="update">change</string>
 </resources>
