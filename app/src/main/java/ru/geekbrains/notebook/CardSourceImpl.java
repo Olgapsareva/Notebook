@@ -3,6 +3,7 @@ package ru.geekbrains.notebook;
 import android.content.res.Resources;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class CardSourceImpl implements CardSource {
@@ -22,7 +23,7 @@ public class CardSourceImpl implements CardSource {
         String[] descriptions = resources.getStringArray(R.array.descriptions);
 
         for (int i = 0; i < descriptions.length; i++) {
-            dataSource.add(new CardData(titles[i], descriptions[i]));
+            dataSource.add(new CardData(titles[i], descriptions[i], Calendar.getInstance().getTime()));
         }
 
         return this;

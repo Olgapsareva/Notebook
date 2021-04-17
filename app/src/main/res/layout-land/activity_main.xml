@@ -22,9 +22,8 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <fragment
-                android:id="@+id/note_list_land"
-                android:name="ru.geekbrains.notebook.NoteListFragment"
+            <FrameLayout
+                android:id="@+id/note_list_container"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />

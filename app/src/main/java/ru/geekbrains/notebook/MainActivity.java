@@ -5,36 +5,46 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 import android.util.Log;
 
-
 import com.google.android.material.navigation.NavigationView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements PublisherGetter {
+
+    private Publisher publisher = new Publisher();
+    private Navigation navigation = new Navigation(getSupportFragmentManager());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
+
         initView();
+
+        Fragment fragment = new NoteListFragment();
+        navigation.addFragment(fragment);
 
     }
 
     private void initView() {
         Toolbar toolbar = initToolbar();
-        initDrawer(toolbar);
+        DrawerLayout drawer = initDrawer(toolbar);
+        initNavigation(drawer);
     }
 
     private Toolbar initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
         return toolbar;
     }
 
-    private void initDrawer(Toolbar toolbar) {
+    private DrawerLayout initDrawer(Toolbar toolbar) {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         //добавляем сэндвич кнопку
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -48,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         //синхронизируем вид кнопки
         toggle.syncState();
 
-        initNavigation(drawer);
+        return drawer;
     }
 
     private void initNavigation(DrawerLayout drawer) {
@@ -56,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         //слушаем навигационное меню
         navigationView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
-            if (navigateFragment(id)){
+            if (navigateFragment(id)) {
                 drawer.closeDrawer(GravityCompat.START);
                 return true;
             }
@@ -64,11 +74,27 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
     //обработка щелчка пользователя
     private boolean navigateFragment(int id) {
         Log.i("PLACEHOLDER", "selected option");
         return true;
     }
 
+
+    public Navigation getNavigation() {
+        return navigation;
+    }
+
+    @Override
+    public Publisher getPublisher() {
+        return publisher;
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
 
 }

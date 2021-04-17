@@ -1,5 +1,6 @@
 package ru.geekbrains.notebook;
 
+import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
@@ -18,21 +19,28 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class NoteListFragment extends Fragment {
+import java.util.Calendar;
+
+public class NoteListFragment extends Fragment{
 
     private boolean isLandscape;
 
     private CardSource data;
     private NoteListAdapter adapter;
     private RecyclerView recyclerView;
-
-
+    private Publisher publisher;
+    private Navigation navigation;
+    //private boolean moveToLastPosition;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         isLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+    }
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        data = new CardSourceImpl(getResources()).init();
     }
 
     @Override
@@ -48,10 +56,23 @@ public class NoteListFragment extends Fragment {
         initNoteList(view);
         setHasOptionsMenu(true);
     }
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        MainActivity activity = (MainActivity) context;
+        publisher = activity.getPublisher();
+        navigation = activity.getNavigation();
+    }
+
+    @Override
+    public void onDetach() {
+        publisher = null;
+        navigation = null;
+        super.onDetach();
+    }
 
 
     private void initNoteList(View view) {
-        data = new CardSourceImpl(getResources()).init();
         recyclerView = view.findViewById(R.id.recycle_note_list);
 
         //создаем адаптер и сетим листенера на нажание элемента списка
@@ -67,6 +88,46 @@ public class NoteListFragment extends Fragment {
 
     }
 
+    //если ориентация альбомная то создается новый фрагмент рядом
+
+    private void showLandscapeNote(CardData cardData) {
+        CardFragment fragment = CardFragment.newInstance(cardData);
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.flfrag, fragment)
+                .commit();
+    }
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_main, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_add:
+                //data.addCardData(new CardData("Новая заметка", "", Calendar.getInstance().getTime()));
+                navigation.addFragment(CardFragment.newInstance());
+                publisher.subscribe(new Observer() {
+                    @Override
+                    public void updateCardData(CardData cardData) {
+                        data.addCardData(cardData);
+                        adapter.notifyItemInserted(data.size() - 1);
+                        recyclerView.scrollToPosition(data.size() - 1);
+                    }
+                });
+
+                return true;
+            case R.id.action_delete:
+                if (data.size() > 0) {
+                    data.deleteCardData(data.size() - 1);
+                    adapter.notifyDataSetChanged();
+                }
+                return true;
+        }
+        return false;
+    }
+
     @Override
     public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
@@ -80,7 +141,7 @@ public class NoteListFragment extends Fragment {
             case R.id.action_update:
                 int index = adapter.getSelectedContextMenuItem();
                 CardData cd = data.getCardData(index);
-                data.updateCardData(index, new CardData(String.format("%s updated", cd.getTitle()), cd.getBody()));
+                data.updateCardData(index, new CardData(String.format("%s updated", cd.getTitle()), cd.getBody(), Calendar.getInstance().getTime()));
                 adapter.notifyItemChanged(index);
                 return true;
             case R.id.action_clear:
@@ -91,56 +152,4 @@ public class NoteListFragment extends Fragment {
         return super.onContextItemSelected(item);
     }
 
-    /*private void createNoteItem(TextView txtV, Note note) {
-        txtV.setText(note.getTitle());
-        txtV.setOnClickListener(v -> {
-            if (isLandscape) {
-                showLandscapeNote(note);
-            } else {
-                showPortraitNote(note);
-            }
-
-        });
-    }*/
-
-    //если ориентация альбомная то создается новый фрагмент рядом
-    private void showLandscapeNote(Note note) {
-        NoteFragment fragment = NoteFragment.newInstance(note);
-        getActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.flfrag, fragment)
-                .commit();
-    }
-
-    private void showPortraitNote(Note note) {
-
-        NoteFragment fragment = NoteFragment.newInstance(note);
-        getActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.note_list_fragment, fragment)
-                .commit();
-    }
-
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_main, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_add:
-                data.addCardData(new CardData("Новая заметка", ""));
-                adapter.notifyItemInserted(data.size() - 1);
-                recyclerView.scrollToPosition(data.size() - 1);
-                return true;
-            case R.id.action_delete:
-                if (data.size() > 0) {
-                    data.deleteCardData(data.size() - 1);
-                    adapter.notifyDataSetChanged();
-                }
-                return true;
-        }
-        return false;
-    }
 }

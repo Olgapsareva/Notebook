@@ -17,9 +17,8 @@
             android:id="@+id/toolbar_main"
             layout="@layout/toolbar_main" />
 
-        <fragment
-            android:id="@+id/note_list_fragment"
-            android:name="ru.geekbrains.notebook.NoteListFragment"
+        <FrameLayout
+            android:id="@+id/note_list_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>
