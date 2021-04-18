@@ -1,10 +1,14 @@
-package ru.geekbrains.notebook;
+package ru.geekbrains.notebook.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 import java.util.Date;
 
+import ru.geekbrains.notebook.ui.Observer;
+
 public class CardData implements Parcelable, Observer {
+
+    private String id;
 
     private String title;
     private String body;
@@ -33,6 +37,14 @@ public class CardData implements Parcelable, Observer {
             return new CardData[size];
         }
     };
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;

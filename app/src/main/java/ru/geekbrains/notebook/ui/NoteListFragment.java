@@ -1,4 +1,4 @@
-package ru.geekbrains.notebook;
+package ru.geekbrains.notebook.ui;
 
 import android.content.Context;
 import android.content.res.Configuration;
@@ -18,10 +18,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import ru.geekbrains.notebook.*;
+import ru.geekbrains.notebook.data.*;
 
-import java.util.Calendar;
-
-public class NoteListFragment extends Fragment{
+public class NoteListFragment extends Fragment {
 
     private boolean isLandscape;
 
@@ -30,17 +30,16 @@ public class NoteListFragment extends Fragment{
     private RecyclerView recyclerView;
     private Publisher publisher;
     private Navigation navigation;
-    //private boolean moveToLastPosition;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         isLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
-    @Override
+   @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        data = new CardSourceImpl(getResources()).init();
+        //data = new CardSourceImpl(getResources()).init();
     }
 
     @Override
@@ -55,7 +54,18 @@ public class NoteListFragment extends Fragment{
         super.onViewCreated(view, savedInstanceState);
         initNoteList(view);
         setHasOptionsMenu(true);
+
+        //получаем наши данные из БД
+        data = new CardSourceFirebaseImpl().init(new CardSourceResponse() {
+            @Override
+            public void initialized(CardSource cardsData) {
+                adapter.notifyDataSetChanged();
+            }
+        });
+        adapter.setData(data);
+
     }
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -76,10 +86,10 @@ public class NoteListFragment extends Fragment{
         recyclerView = view.findViewById(R.id.recycle_note_list);
 
         //создаем адаптер и сетим листенера на нажание элемента списка
-        adapter = new NoteListAdapter(data,
+        adapter = new NoteListAdapter(
                 (view1, position) ->
-                //TODO заменить на что-то полезное:
-                Log.i("PLACEHOLDER", String.format("note %s selected", data.getCardData(position).getTitle())),
+                        //TODO заменить на что-то полезное:
+                        Log.i("PLACEHOLDER", String.format("note %s selected", data.getCardData(position).getTitle())),
                 this);
 
         //прикручиваем адаптер к ресайкл вью и отображаем с помощью менеджера
@@ -97,6 +107,7 @@ public class NoteListFragment extends Fragment{
                 .replace(R.id.flfrag, fragment)
                 .commit();
     }
+
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.menu_main, menu);
@@ -116,10 +127,11 @@ public class NoteListFragment extends Fragment{
                         recyclerView.scrollToPosition(data.size() - 1);
                     }
                 });
-
                 return true;
+
             case R.id.action_delete:
                 if (data.size() > 0) {
+                    //TODO настроить удаление элементов через чекбокс
                     data.deleteCardData(data.size() - 1);
                     adapter.notifyDataSetChanged();
                 }
@@ -137,12 +149,22 @@ public class NoteListFragment extends Fragment{
 
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.action_update:
+                //получаем карточку по выбранной позиции
                 int index = adapter.getSelectedContextMenuItem();
                 CardData cd = data.getCardData(index);
-                data.updateCardData(index, new CardData(String.format("%s updated", cd.getTitle()), cd.getBody(), Calendar.getInstance().getTime()));
-                adapter.notifyItemChanged(index);
+                //открываем выбранную карточку
+                navigation.addFragment(CardFragment.newInstance(cd));
+                publisher.subscribe(new Observer() {
+                    @Override
+                    public void updateCardData(CardData cardData) {
+                        data.updateCardData(index, cardData);
+                        adapter.notifyItemChanged(index);
+                    }
+                });
+                //data.updateCardData(index, new CardData(String.format("%s updated", cd.getTitle()), cd.getBody(), Calendar.getInstance().getTime()));
+
                 return true;
             case R.id.action_clear:
                 data.clearCardData();

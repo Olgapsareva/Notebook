@@ -1,7 +1,7 @@
-package ru.geekbrains.notebook;
+package ru.geekbrains.notebook.data;
 
 public interface CardSource {
-
+    CardSource init(CardSourceResponse cardsSourceResponse);
     CardData getCardData(int position);
     int size();
     void deleteCardData(int position);

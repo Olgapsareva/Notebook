@@ -15,9 +15,9 @@ public class Navigation {
 
     public void addFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        if (fragmentManager.getBackStackEntryCount()==0) {
+        if (fragmentManager.getBackStackEntryCount() == 0) {
             fragmentTransaction.add(R.id.note_list_container, fragment);
-        } else{
+        } else {
             fragmentTransaction.replace(R.id.note_list_container, fragment);
         }
         fragmentTransaction.addToBackStack(null);

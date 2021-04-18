@@ -1,7 +1,9 @@
-package ru.geekbrains.notebook;
+package ru.geekbrains.notebook.ui;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import ru.geekbrains.notebook.data.CardData;
 
 public class Publisher {
 

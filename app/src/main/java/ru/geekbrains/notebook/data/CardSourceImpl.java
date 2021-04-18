@@ -1,10 +1,12 @@
-package ru.geekbrains.notebook;
+package ru.geekbrains.notebook.data;
 
 import android.content.res.Resources;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
+import ru.geekbrains.notebook.R;
 
 public class CardSourceImpl implements CardSource {
 
@@ -18,12 +20,17 @@ public class CardSourceImpl implements CardSource {
     }
 
     //инициализируем карточки данными из arrays, добавляем в лист
-    public CardSourceImpl init() {
+    public CardSource init(CardSourceResponse cardSourceResponse) {
+        //получаем данные из ресурсов
         String[] titles = resources.getStringArray(R.array.titles);
         String[] descriptions = resources.getStringArray(R.array.descriptions);
 
         for (int i = 0; i < descriptions.length; i++) {
             dataSource.add(new CardData(titles[i], descriptions[i], Calendar.getInstance().getTime()));
+        }
+
+        if (cardSourceResponse != null){
+            cardSourceResponse.initialized(this);
         }
 
         return this;
@@ -32,6 +39,7 @@ public class CardSourceImpl implements CardSource {
     public Resources getResources() {
         return resources;
     }
+
 
     @Override
     public CardData getCardData(int position) {

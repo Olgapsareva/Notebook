@@ -1,4 +1,4 @@
-package ru.geekbrains.notebook;
+package ru.geekbrains.notebook.ui;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,10 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import java.util.Calendar;
 import java.util.Date;
+
+import ru.geekbrains.notebook.MainActivity;
+import ru.geekbrains.notebook.R;
+import ru.geekbrains.notebook.data.CardData;
 
 public class CardFragment extends Fragment {
 
@@ -102,12 +105,20 @@ public class CardFragment extends Fragment {
         cardData = collectCardData();
     }
 
-    //собираем данные из фрагмента
+    //собираем данные из БД
     private CardData collectCardData() {
         String title = this.title.getText().toString();
         String body = this.body.getText().toString();
         Date date = getDateFromDatePicker();
-        return new CardData(title, body, date);
+
+        if (cardData != null){
+            CardData answer;
+            answer = new CardData(title, body, date);
+            answer.setId(cardData.getId());
+            return answer;
+        } else {
+            return new CardData(title, body, date);
+        }
     }
 
     //получает выбранную пользователем дату

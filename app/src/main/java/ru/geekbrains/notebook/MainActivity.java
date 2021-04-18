@@ -6,12 +6,14 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 import android.util.Log;
 
 import com.google.android.material.navigation.NavigationView;
+
+import ru.geekbrains.notebook.ui.NoteListFragment;
+import ru.geekbrains.notebook.ui.Publisher;
 
 public class MainActivity extends AppCompatActivity implements PublisherGetter {
 

@@ -1,4 +1,4 @@
-package ru.geekbrains.notebook;
+package ru.geekbrains.notebook.ui;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,18 +10,26 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import ru.geekbrains.notebook.R;
+import ru.geekbrains.notebook.data.CardData;
+import ru.geekbrains.notebook.data.CardSource;
+
 public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.ViewHolder> {
 
-    private final CardSource data;
+    private CardSource data;
     private final OnItemClickListener listener;
     private static Fragment fragment;
     private static int selectedContextMenuItem;
 
 
-    public NoteListAdapter(CardSource data, OnItemClickListener listener, Fragment fragment) {
-        this.data = data;
+    public NoteListAdapter(OnItemClickListener listener, Fragment fragment) {
         this.listener = listener;
         this.fragment = fragment;
+    }
+
+    public void setData(CardSource data) {
+        this.data = data;
+        notifyDataSetChanged();
     }
 
     @NonNull
