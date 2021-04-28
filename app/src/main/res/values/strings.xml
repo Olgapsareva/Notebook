@@ -1,3 +1,28 @@
 <resources>
     <string name="app_name">Notebook</string>
+    <string name="show_notes">show notes</string>
+    <string name="typo_note">type something</string>
+    <string name="date">Date</string>
+    <string name="title">Title</string>
+    <string name="contacts">user contact detail</string>
+    <string name="starred">Starred</string>
+    <string name="trash">Trash</string>
+    <string name="about">About the app</string>
+    <string name="settings">Settings</string>
+    <string name="nav_open_drawer">Open navigation drawer</string>
+    <string name="nav_close_drawer">Close navigation drawer</string>
+    <string name="title1">Shopping list</string>
+    <string name="title2">To DO list</string>
+    <string name="title3">note</string>
+    <string name="description1">sugar\nsalt\nbread</string>
+    <string name="description2">wake up\ndo stuff\ngo to bed</string>
+    <string name="description3" />
+    <string name="add">add</string>
+    <string name="delete">trash</string>
+    <string name="clear">remove all</string>
+    <string name="update">change</string>
+    <string name="confirmation_dialog_content">Are you sure you want to delete files?</string>
+    <string name="confirmation_dialog_title">CONFIRM ACTION</string>
+    <string name="confirmation_dialog_positive_button">YES</string>
+    <string name="confirmation_dialog_negative_button">CANCEL</string>
 </resources>
