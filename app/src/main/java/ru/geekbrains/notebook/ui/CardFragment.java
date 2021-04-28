@@ -24,7 +24,7 @@ public class CardFragment extends Fragment {
     private static final String ARG_CARD_DATA = "Param_CardData";
 
     private CardData cardData;
-    private Publisher publisher;
+    private CardDataPublisher cardDataPublisher;
     private EditText title;
     private EditText body;
     private DatePicker datePicker;
@@ -58,7 +58,7 @@ public class CardFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         MainActivity activity = (MainActivity)context;
-        publisher = activity.getPublisher();
+        cardDataPublisher = activity.getCardDataPublisher();
     }
 
 
@@ -134,13 +134,13 @@ public class CardFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        publisher.notifyObservers(cardData);
+        cardDataPublisher.notifyObservers(cardData);
     }
 
     //publisher создается каждый раз при создании фрагмента
     @Override
     public void onDetach() {
-        publisher = null;
+        cardDataPublisher = null;
         super.onDetach();
     }
 

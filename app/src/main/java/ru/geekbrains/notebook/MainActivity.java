@@ -11,13 +11,12 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.google.android.material.navigation.NavigationView;
-
 import ru.geekbrains.notebook.ui.NoteListFragment;
-import ru.geekbrains.notebook.ui.Publisher;
+import ru.geekbrains.notebook.ui.CardDataPublisher;
 
-public class MainActivity extends AppCompatActivity implements PublisherGetter {
+public class MainActivity extends AppCompatActivity implements DialogFragmentInterface {
 
-    private Publisher publisher = new Publisher();
+    private CardDataPublisher cardDataPublisher = new CardDataPublisher();
     private Navigation navigation = new Navigation(getSupportFragmentManager());
 
     @Override
@@ -88,9 +87,8 @@ public class MainActivity extends AppCompatActivity implements PublisherGetter {
         return navigation;
     }
 
-    @Override
-    public Publisher getPublisher() {
-        return publisher;
+    public CardDataPublisher getCardDataPublisher() {
+        return cardDataPublisher;
     }
 
     @Override
@@ -99,4 +97,13 @@ public class MainActivity extends AppCompatActivity implements PublisherGetter {
         return true;
     }
 
+    @Override
+    public int onYesButtonClick() {
+        return 0;
+    }
+
+    @Override
+    public int onCancelButtonClick() {
+        return -1;
+    }
 }

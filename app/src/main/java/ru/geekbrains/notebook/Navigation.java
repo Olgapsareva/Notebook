@@ -12,7 +12,6 @@ public class Navigation {
         this.fragmentManager = fragmentManager;
     }
 
-
     public void addFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         if (fragmentManager.getBackStackEntryCount() == 0) {

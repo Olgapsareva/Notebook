@@ -24,8 +24,8 @@ public class CardSourceFirebaseImpl implements CardSource {
 
     private static final String CARDS_COLLECTION = "cards";
     private static final String TAG = "[CardsSourceFirebaseImpl]";
-    private FirebaseFirestore store = FirebaseFirestore.getInstance();              // База данных Firestore
-    private CollectionReference collection = store.collection(CARDS_COLLECTION);  // Коллекция документов
+    private FirebaseFirestore firestore = FirebaseFirestore.getInstance();              // База данных Firestore
+    private CollectionReference collection = firestore.collection(CARDS_COLLECTION);  // Коллекция документов
     private List<CardData> cardsData = new ArrayList<>();               // Загружаемый список карточек
 
     @Override
@@ -49,7 +49,7 @@ public class CardSourceFirebaseImpl implements CardSource {
                             Log.i(TAG, "success " + cardsData.size() + " qnt");
                             cardsSourceResponse.initialized(CardSourceFirebaseImpl.this);
                         } else {
-                            Log.i(TAG, "get failed with ", task.getException());
+                            Log.e(TAG, "get failed with ", task.getException());
                         }
                     }
                 })
@@ -58,7 +58,7 @@ public class CardSourceFirebaseImpl implements CardSource {
                     @SuppressLint("LongLogTag")
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "get failed with ", e);
+                        Log.e(TAG, "get failed with ", e);
                     }
                 });
         return this;

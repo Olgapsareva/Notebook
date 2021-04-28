@@ -6,10 +6,6 @@
     android:orientation="vertical"
     tools:context=".ui.NoteListFragment">
 
-<!--    <include
-        android:id="@+id/toolbar_main"
-        layout="@layout/toolbar_main"/>-->
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycle_note_list"
         android:layout_width="match_parent"

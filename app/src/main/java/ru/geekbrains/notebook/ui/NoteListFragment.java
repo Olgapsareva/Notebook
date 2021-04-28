@@ -28,18 +28,16 @@ public class NoteListFragment extends Fragment {
     private CardSource data;
     private NoteListAdapter adapter;
     private RecyclerView recyclerView;
-    private Publisher publisher;
+    private CardDataPublisher cardDataPublisher;
     private Navigation navigation;
+
+    final String TAG = "[CONFIRMATION DIALOG]";
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         isLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
-    }
-   @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        //data = new CardSourceImpl(getResources()).init();
     }
 
     @Override
@@ -70,13 +68,13 @@ public class NoteListFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         MainActivity activity = (MainActivity) context;
-        publisher = activity.getPublisher();
+        cardDataPublisher = activity.getCardDataPublisher();
         navigation = activity.getNavigation();
     }
 
     @Override
     public void onDetach() {
-        publisher = null;
+        cardDataPublisher = null;
         navigation = null;
         super.onDetach();
     }
@@ -119,7 +117,7 @@ public class NoteListFragment extends Fragment {
             case R.id.action_add:
                 //data.addCardData(new CardData("Новая заметка", "", Calendar.getInstance().getTime()));
                 navigation.addFragment(CardFragment.newInstance());
-                publisher.subscribe(new Observer() {
+                cardDataPublisher.subscribe(new CardDataObserver() {
                     @Override
                     public void updateCardData(CardData cardData) {
                         data.addCardData(cardData);
@@ -132,12 +130,18 @@ public class NoteListFragment extends Fragment {
             case R.id.action_delete:
                 if (data.size() > 0) {
                     //TODO настроить удаление элементов через чекбокс
+                    openConfirmationDialog();
                     data.deleteCardData(data.size() - 1);
                     adapter.notifyDataSetChanged();
                 }
                 return true;
         }
         return false;
+    }
+
+    private void openConfirmationDialog() {
+        DialogConfirmationFragment confirmationDialog = new DialogConfirmationFragment();
+        confirmationDialog.show(requireActivity().getSupportFragmentManager(), TAG);
     }
 
     @Override
@@ -156,7 +160,7 @@ public class NoteListFragment extends Fragment {
                 CardData cd = data.getCardData(index);
                 //открываем выбранную карточку
                 navigation.addFragment(CardFragment.newInstance(cd));
-                publisher.subscribe(new Observer() {
+                cardDataPublisher.subscribe(new CardDataObserver() {
                     @Override
                     public void updateCardData(CardData cardData) {
                         data.updateCardData(index, cardData);

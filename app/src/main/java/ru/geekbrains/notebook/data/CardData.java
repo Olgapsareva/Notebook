@@ -4,9 +4,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import java.util.Date;
 
-import ru.geekbrains.notebook.ui.Observer;
+import ru.geekbrains.notebook.ui.CardDataObserver;
 
-public class CardData implements Parcelable, Observer {
+public class CardData implements Parcelable, CardDataObserver {
 
     private String id;
 
